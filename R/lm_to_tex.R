@@ -8,6 +8,10 @@ lmp <- function (modelobject) {
 	return(p)
 }
 
+# Round decimals
+# Source: http://stackoverflow.com/questions/3443687/formatting-decimal-places-in-r
+specify_decimal <- function(x, k) format(round(x, k), nsmall=k)
+
 #' lm model to TeX
 #'
 #' This function takes a list of lm models and outputs TeX code to create a pretty table.
@@ -18,6 +22,7 @@ lmp <- function (modelobject) {
 #' Plans for later features:
 #' 1. Take list of models and put them in the same table.
 #' 2. Compile and show pdf
+#' 3. Truncate decimal places
 #'
 #' @param file chr file name for output.
 #' @param models List of lm models.
@@ -59,14 +64,14 @@ lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T) {
 	for (i in 1:length(var_list)) {
 		lines = c(lines, paste(c(
 				var_list[i],
-				"&",
-				ifelse(coef_list>0,"\\phantom{$+$}",""),
-				coef_list[i],
-				ifelse(confint,paste(c("(",ci[i,1],ci[i,2],")"),collapse=""),""),
-				ifelse(p_list[i]<.001,"***",ifelse(p_list[i]<.01, "**", ifelse(p_list[i]<.05,"*", ifelse(p_list[i]<.1,"^+",""))))),collapse=""))
+				" & ",
+				ifelse(coef_list[i]>0,"\\phantom{$+$}",""),
+				coef_list[i]," ",
+				ifelse(confint,paste(c("(",ci[i,1],",",ci[i,2],")"),collapse=""),""),
+				ifelse(p_list[i]<.001,"***",ifelse(p_list[i]<.01, "**", ifelse(p_list[i]<.05,"*", ifelse(p_list[i]<.1,"^+","")))),"\\\\"),collapse=""))
 	}
 	lines = c(lines,"\\midrule")
-	lines = c(lines,paste(c("\\textbf{$R^2$} &", R2), collapse=""),paste(c("\\textbf{N} &",N), collapse=""),"\\end{tabular}")
+	lines = c(lines,paste(c("\\textbf{$R^2$} &", R2,"\\\\"), collapse=""),paste(c("\\textbf{N} &",N,"\\\\"), collapse=""),"\\end{tabular}")
 	
 	#Create end of file
 	lines = c(lines, "","\t\t} %end hbox and savebox",
