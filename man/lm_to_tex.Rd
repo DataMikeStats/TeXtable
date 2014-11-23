@@ -3,9 +3,12 @@
 \alias{lm_to_tex}
 \title{lm model to TeX}
 \usage{
-lm_to_tex(models, confint = T, fit = T, sample.size = T)
+lm_to_tex(file, models, confint = T, fit = T, sample.size = T,
+  decimals = 2)
 }
 \arguments{
+\item{file}{chr file name for output.}
+
 \item{models}{List of lm models.}
 
 \item{confint}{Logical if \code{TRUE} adds confidence interval to the table.}
@@ -13,9 +16,11 @@ lm_to_tex(models, confint = T, fit = T, sample.size = T)
 \item{fit}{Logical if \code{TRUE} adds fit information (R^2) to the table.}
 
 \item{sample.size}{Logical if \code{TRUE} adds sample size to the table.}
+
+\item{decimals}{int Number of decimal places.}
 }
 \value{
-chr TeX code for the table
+NULL. Just outputs the table as a file.
 }
 \description{
 This function takes a list of lm models and outputs TeX code to create a pretty table.
@@ -26,11 +31,11 @@ much of a list). We output the TeX code to the console.
 
 Plans for later features:
 1. Take list of models and put them in the same table.
-2. Output to a file
-3. Compile and show pdf
+2. Compile and show pdf
+3. Truncate decimal places
 }
 \examples{
-lm_to_tex(list(model1, model2))
-lm_to_tex(list(model1), confint=F, fit=F, sample.size=F)
+lm_to_tex("output.tex",list(model1, model2))
+lm_to_tex("output.tex",list(model1), confint=F, fit=F, sample.size=F)
 }
 

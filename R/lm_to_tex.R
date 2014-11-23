@@ -29,12 +29,15 @@ specify_decimal <- function(x, k) format(round(x, k), nsmall=k)
 #' @param confint Logical if \code{TRUE} adds confidence interval to the table.
 #' @param fit Logical if \code{TRUE} adds fit information (R^2) to the table.
 #' @param sample.size Logical if \code{TRUE} adds sample size to the table.
+#' @param decimals int Number of decimal places.
 #' @return NULL. Just outputs the table as a file.
 #' @export
 #' @examples
-#' lm_to_tex(list(model1, model2))
-#' lm_to_tex(list(model1), confint=F, fit=F, sample.size=F)
-lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T) {
+#' lm_to_tex("output.tex",list(model1, model2))
+#' lm_to_tex("output.tex",list(model1), confint=F, fit=F, sample.size=F)
+lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, decimals=2) {
+	
+	k= decimals
 
 	#Create start of file
 	lines = c("\\documentclass[]{article}")
@@ -66,12 +69,12 @@ lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T) {
 				var_list[i],
 				" & ",
 				ifelse(coef_list[i]>0,"\\phantom{$+$}",""),
-				coef_list[i]," ",
-				ifelse(confint,paste(c("(",ci[i,1],",",ci[i,2],")"),collapse=""),""),
+				specify_decimal(coef_list[i],k)," ",
+				ifelse(confint,paste(c("(",specify_decimal(ci[i,1],k),",",specify_decimal(ci[i,2],k),")"),collapse=""),""),
 				ifelse(p_list[i]<.001,"***",ifelse(p_list[i]<.01, "**", ifelse(p_list[i]<.05,"*", ifelse(p_list[i]<.1,"^+","")))),"\\\\"),collapse=""))
 	}
 	lines = c(lines,"\\midrule")
-	lines = c(lines,paste(c("\\textbf{$R^2$} &", R2,"\\\\"), collapse=""),paste(c("\\textbf{N} &",N,"\\\\"), collapse=""),"\\end{tabular}")
+	lines = c(lines,paste(c("\\textbf{$R^2$} &", specify_decimal(R2,k),"\\\\"), collapse=""),paste(c("\\textbf{N} &",N,"\\\\"), collapse=""),"\\end{tabular}")
 	
 	#Create end of file
 	lines = c(lines, "","\t\t} %end hbox and savebox",
