@@ -1,6 +1,6 @@
 library(stringr)
 #library(lme4)
-#library(lmerTest)
+library(lmerTest)
 
 test_that("generates with all parameters TRUE and compares to one change", {
 	fileName.target <- 'lmer_all.tex'

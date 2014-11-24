@@ -16,6 +16,7 @@
 #' @param confint Logical if \code{TRUE} (default) adds confidence interval to the table.
 #' @param fit Logical if \code{TRUE} (default) adds fit information (AIC) to the table.
 #' @param sample.size Logical if \code{TRUE} (default) adds sample size to the table.
+#' @param groups Logical if \code{TRUE} (default) adds group o the table.
 #' @param decimals int Number of decimal places (2 by default).
 #' @return NULL. Just outputs the table as a file.
 #' @note We approximate p values using lmerTest::summary
@@ -30,7 +31,6 @@
 #' lmer_to_tex("output.tex",list(model1, model2))
 #' lmer_to_tex("output.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
 lmer_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, groups=T, decimals=2) {
-	require(lmerTest)
 	k= decimals
 
 	#Create start of file

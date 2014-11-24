@@ -32,7 +32,7 @@ Third parameter is whether you want a confidence interval. By default `confint` 
 
 Fourth parameter is `fit`. If `TRUE` it will output the appropriate fit value - $R^2$ for `lm` and `AIC` for `lmer`. For $R^2$, it will also add significance stars.
 
-Fifth parameter is the `sample.size`, which just adds the sample size to the table.
+Fifth parameter is the `sample.size`, which just adds the sample size to the table. `lmer_to_tex` also has `groups` which if `TRUE` outputs the number of clusters in the multilevel model.
 
 Finally, you can specify the number of decimal places with `decimals`. By default it's set to 2 decimal places.
 
