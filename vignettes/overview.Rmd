@@ -1,6 +1,6 @@
 ---
-title: "Overview of TeXtable"
-author: "Mike"
+title: "Vignette Title"
+author: "Vignette Author"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

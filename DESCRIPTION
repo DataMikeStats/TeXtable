@@ -9,5 +9,6 @@ Depends:
     lmerTest (>= 2.0)
 License: CC0
 LazyData: true
-Suggests: knitr
+Suggests: knitr,
+    testthat
 VignetteBuilder: knitr

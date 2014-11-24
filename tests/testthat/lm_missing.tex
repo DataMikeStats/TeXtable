@@ -1,0 +1,27 @@
+\documentclass[]{article}
+	\usepackage[active,tightpage,pdftex,floats]{preview}
+\usepackage{booktabs}
+\usepackage{caption}
+\begin{document}
+	\newsavebox{\tabularBoxgunfw}
+		\sbox{\tabularBoxgunfw}{
+
+\begin{tabular}{lc}
+& \textbf{Model 1}\\ \toprule
+(Intercept) & \phantom{$+$}5.03 ***\\
+groupTrt & -0.37 \\
+\midrule
+\textbf{$R^2$} &0.07\\
+\textbf{N} &20\\
+\end{tabular}
+
+		} %end hbox and savebox
+	\newlength{\lengunfw}
+	\settowidth{\lengunfw}{\usebox{\tabularBoxgunfw}}
+\begin{table}
+	\begin{minipage}[h]{ \lengunfw } \usebox{ \tabularBoxgunfw }
+		\begin{center}
+			{ ***: $p<.001$, **: $p<.01$, *: $p<.05$, $^+$: $p<.1$}
+		\end{center}
+	\end{minipage}\end{table}
+\end{document}
