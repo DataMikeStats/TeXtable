@@ -11,13 +11,13 @@ lm_to_tex(file, models, confint = T, fit = T, sample.size = T,
 
 \item{models}{List of lm models.}
 
-\item{confint}{Logical if \code{TRUE} adds confidence interval to the table.}
+\item{confint}{Logical if \code{TRUE} (default) adds confidence interval to the table.}
 
-\item{fit}{Logical if \code{TRUE} adds fit information (R^2) to the table.}
+\item{fit}{Logical if \code{TRUE} (default) adds fit information (R^2) to the table.}
 
-\item{sample.size}{Logical if \code{TRUE} adds sample size to the table.}
+\item{sample.size}{Logical if \code{TRUE}  (default) adds sample size to the table.}
 
-\item{decimals}{int Number of decimal places.}
+\item{decimals}{int Number of decimal places (2 by default).}
 }
 \value{
 NULL. Just outputs the table as a file.

@@ -2,5 +2,4 @@
 
 export(lm_to_tex)
 export(lmer_to_tex)
-import(lme4)
 import(lmerTest)

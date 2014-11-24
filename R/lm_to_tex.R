@@ -13,10 +13,10 @@
 #'
 #' @param file chr file name for output.
 #' @param models List of lm models.
-#' @param confint Logical if \code{TRUE} adds confidence interval to the table.
-#' @param fit Logical if \code{TRUE} adds fit information (R^2) to the table.
-#' @param sample.size Logical if \code{TRUE} adds sample size to the table.
-#' @param decimals int Number of decimal places.
+#' @param confint Logical if \code{TRUE} (default) adds confidence interval to the table.
+#' @param fit Logical if \code{TRUE} (default) adds fit information (R^2) to the table.
+#' @param sample.size Logical if \code{TRUE}  (default) adds sample size to the table.
+#' @param decimals int Number of decimal places (2 by default).
 #' @return NULL. Just outputs the table as a file.
 #' @export
 #' @examples
@@ -50,12 +50,12 @@ lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, decimals=2)
 	#MAGIC HAPPENS HERE
 	#Assume 1 model for now
 	model <- models[[1]]
-	
+	summ <- summary(model)
 	lines = c(lines,"\\begin{tabular}{lc}",
 		"& \\textbf{Model 1}\\\\ \\toprule")
 	var_list = variable.names(model)
 	coef_list = model$coefficients
-	p_list = coef(summary(model))[,4]
+	p_list = coef(summ)[,ncol(coef(summ))] #Assumes p value is in the last column
 	N = nrow(model.frame(model))
 	R2 = summary(model)$r.squared
 	R2.p = lmp(model)

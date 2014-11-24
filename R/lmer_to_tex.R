@@ -13,13 +13,12 @@
 #'
 #' @param file chr file name for output.
 #' @param models List of lm models.
-#' @param confint Logical if \code{TRUE} adds confidence interval to the table.
-#' @param fit Logical if \code{TRUE} adds fit information (R^2) to the table.
-#' @param sample.size Logical if \code{TRUE} adds sample size to the table.
-#' @param decimals int Number of decimal places.
+#' @param confint Logical if \code{TRUE} (default) adds confidence interval to the table.
+#' @param fit Logical if \code{TRUE} (default) adds fit information (AIC) to the table.
+#' @param sample.size Logical if \code{TRUE} (default) adds sample size to the table.
+#' @param decimals int Number of decimal places (2 by default).
 #' @return NULL. Just outputs the table as a file.
 #' @note We approximate p values using lmerTest::summary
-#' @import lme4
 #' @import lmerTest
 #' @export
 #' @examples
@@ -31,9 +30,7 @@
 #' lmer_to_tex("output.tex",list(model1, model2))
 #' lmer_to_tex("output.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
 lmer_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, groups=T, decimals=2) {
-	require(lme4)
 	require(lmerTest)
-	
 	k= decimals
 
 	#Create start of file
@@ -56,7 +53,7 @@ lmer_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, groups=T,
 	summ <- summary(model)
 	var_list = row.names(summ$coefficients)
 	coef_list = summ$coefficients
-	p_list = coef(summary(model))[,5]
+	p_list = coef(summ)[,ncol(coef(summ))] #Assumes p value is in the last column
 	N = nrow(model.frame(model))
 	N.groups = summ$ngrps[[1]]
 	AIC = AIC(logLik(model))

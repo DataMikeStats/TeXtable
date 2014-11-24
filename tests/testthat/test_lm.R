@@ -1,7 +1,7 @@
 library(stringr)
 
 test_that("generates with all parameters TRUE", {
-	fileName.target <- './tests/testthat/lm_all.tex'
+	fileName.target <- 'lm_all.tex'
 	target <- readChar(fileName.target, file.info(fileName.target)$size)
 	
 	ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
@@ -10,9 +10,9 @@ test_that("generates with all parameters TRUE", {
 	weight <- c(ctl, trt)
 	model1 <- lm(weight ~ group)
 	
-	lm_to_tex("./tests/testthat/test.tex",list(model1))
+	lm_to_tex("test.tex",list(model1))
 	
-	fileName.compare <- './tests/testthat/test.tex'
+	fileName.compare <- 'test.tex'
 	comparison <- readChar(fileName.compare, file.info(fileName.compare)$size)
 	
 	#target generated on windows. Just in case running on *nix, remove \r.
@@ -23,7 +23,7 @@ test_that("generates with all parameters TRUE", {
 })
 
 test_that("generate with all parameters FALSE", {
-	fileName.target <- './tests/testthat/lm_missing.tex'
+	fileName.target <- 'lm_missing.tex'
 	target <- readChar(fileName.target, file.info(fileName.target)$size)
 	
 	ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
@@ -32,9 +32,9 @@ test_that("generate with all parameters FALSE", {
 	weight <- c(ctl, trt)
 	model1 <- lm(weight ~ group)
 	
-	lm_to_tex("./tests/testthat/test.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
+	lm_to_tex("test.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
 	
-	fileName.compare <- './tests/testthat/test.tex'
+	fileName.compare <- 'test.tex'
 	comparison <- readChar(fileName.compare, file.info(fileName.compare)$size)
 	
 	#target generated on windows. Just in case running on *nix, remove \r.
@@ -45,7 +45,7 @@ test_that("generate with all parameters FALSE", {
 })
 
 test_that("Test that 3 decimals fail", {
-	fileName.target <- './tests/testthat/lm_all.tex'
+	fileName.target <- 'lm_all.tex'
 	target <- readChar(fileName.target, file.info(fileName.target)$size)
 	
 	ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
@@ -54,9 +54,9 @@ test_that("Test that 3 decimals fail", {
 	weight <- c(ctl, trt)
 	model1 <- lm(weight ~ group)
 	
-	lm_to_tex("./tests/testthat/test.tex",list(model1), decimals = 3)
+	lm_to_tex("test.tex",list(model1), decimals = 3)
 	
-	fileName.compare <- './tests/testthat/test.tex'
+	fileName.compare <- 'test.tex'
 	comparison <- readChar(fileName.compare, file.info(fileName.compare)$size)
 	
 	#target generated on windows. Just in case running on *nix, remove \r.

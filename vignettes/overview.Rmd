@@ -1,58 +1,43 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "TeXtable Overview"
+author: "Mike"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{TeXtable Overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\usepackage[utf8]{inputenc}
 ---
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+TeXtable is designed to turn your lm and lme4::lmer models into publication-ready LaTeX code that creates pretty tables like these:
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+![lm example](lm.PNG)
 
-## Vignette Info
+![lmer example](lmer.PNG)
 
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+## Functions
 
-## Styles
+`lm_to_tex` will turn an `lm` model into a TeX file.
+`lmer_to_tex` will turn an `lme4::lmer` model into a TeX file.
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+Both functions have the same parameters. Let's go over them.
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+## Parameters
 
-## Figures
+First parameter is the file name (`file`). This is the name and location of the output **.tex** file.
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+Second parameter is a list of the models. Input it like so `list(model1, model2)`. Right now, the functions will take multiple models, but will only output the first one. If you're actually thinking of using this, stay tuned - I'll likely finish it off soon.
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
-```
+Third parameter is whether you want a confidence interval. By default `confint` is `TRUE` and generates the 95% confidence interval in parantheses after each coefficient.
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+Fourth parameter is `fit`. If `TRUE` it will output the appropriate fit value - $R^2$ for `lm` and `AIC` for `lmer`. For $R^2$, it will also add significance stars.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
+Fifth parameter is the `sample.size`, which just adds the sample size to the table.
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+Finally, you can specify the number of decimal places with `decimals`. By default it's set to 2 decimal places.
 
-## More Examples
+Hope you find this helpful!
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+## Homework stuff
 
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
-```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+All homework requirements have been met.
