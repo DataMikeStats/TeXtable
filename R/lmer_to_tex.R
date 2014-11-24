@@ -1,8 +1,8 @@
 #Note, helper functions are in helper.R
 
-#' lm model to TeX
+#' lmer model to TeX
 #'
-#' This function takes a list of lm models and outputs TeX code to create a pretty table.
+#' This function takes a list of lme4::lmer models and outputs TeX code to create a pretty table.
 #'
 #' In this version, we start simple. The list can only contain a single model (not
 #' much of a list). We output the TeX code to the console.
@@ -18,21 +18,21 @@
 #' @param sample.size Logical if \code{TRUE} adds sample size to the table.
 #' @param decimals int Number of decimal places.
 #' @return NULL. Just outputs the table as a file.
+#' @note We approximate p values using lmerTest::summary
+#' @import lme4
+#' @import lmerTest
 #' @export
 #' @examples
-#' ## Example from lm:
-#' ## Annette Dobson (1990) "An Introduction to Generalized Linear Models".
-#' ## Page 9: Plant Weight Data.
-#' ctl <- c(4.17,5.58,5.18,6.11,4.50,4.61,5.17,4.53,5.33,5.14)
-#' trt <- c(4.81,4.17,4.41,3.59,5.87,3.83,6.03,4.89,4.32,4.69)
-#' group <- gl(2, 10, 20, labels = c("Ctl","Trt"))
-#' weight <- c(ctl, trt)
-#' model1 <- lm(weight ~ group)
-#' model2 <- lm(weight ~ group - 1) # omitting intercept
+#' ## Example from lme4::lmer:
+#' ## linear mixed models - reference values from older code
+#' model1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+#' model2 <- lmer(Reaction ~ Days + I(Days^2) + (Days | Subject), sleepstudy)
 #' 
-#' lm_to_tex("output.tex",list(model1, model2))
-#' lm_to_tex("output.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
-lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, decimals=2) {
+#' lmer_to_tex("output.tex",list(model1, model2))
+#' lmer_to_tex("output.tex",list(model1), confint=FALSE, fit=FALSE, sample.size=FALSE)
+lmer_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, groups=T, decimals=2) {
+	require(lme4)
+	require(lmerTest)
 	
 	k= decimals
 
@@ -53,12 +53,13 @@ lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, decimals=2)
 	
 	lines = c(lines,"\\begin{tabular}{lc}",
 		"& \\textbf{Model 1}\\\\ \\toprule")
-	var_list = variable.names(model)
-	coef_list = model$coefficients
-	p_list = coef(summary(model))[,4]
+	summ <- summary(model)
+	var_list = row.names(summ$coefficients)
+	coef_list = summ$coefficients
+	p_list = coef(summary(model))[,5]
 	N = nrow(model.frame(model))
-	R2 = summary(model)$r.squared
-	R2.p = lmp(model)
+	N.groups = summ$ngrps[[1]]
+	AIC = AIC(logLik(model))
 	ci = confint(model)
 	
 	for (i in 1:length(var_list)) {
@@ -71,7 +72,7 @@ lm_to_tex <- function(file, models, confint=T, fit=T, sample.size=T, decimals=2)
 				ifelse(p_list[i]<.001,"***",ifelse(p_list[i]<.01, "**", ifelse(p_list[i]<.05,"*", ifelse(p_list[i]<.1,"^+","")))),"\\\\"),collapse=""))
 	}
 	lines = c(lines,"\\midrule")
-	lines = c(lines,paste(c("\\textbf{$R^2$} &", specify_decimal(R2,k), ifelse(R2.p<.001,"***",ifelse(R2.p<.01, "**", ifelse(R2.p<.05,"*", ifelse(R2.p<.1,"^+","")))),"\\\\"), collapse=""),paste(c("\\textbf{N} &",N,"\\\\"), collapse=""),"\\end{tabular}")
+	lines = c(lines,paste(c("\\textbf{AIC} &", specify_decimal(AIC,k),"\\\\"), collapse=""),paste(c("\\textbf{Obs.} &",N,"\\\\"), collapse=""),paste(c("\\textbf{Groups} &",N.groups,"\\\\"), collapse=""),"\\end{tabular}")
 	
 	#Create end of file
 	lines = c(lines, "","\t\t} %end hbox and savebox",
